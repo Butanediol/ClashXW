@@ -189,7 +189,8 @@ constexpr bool CheckBuildNumber(DWORD buildNumber)
 {
 	return (buildNumber == 17763 || // 1809
 		buildNumber == 18362 || // 1903 & 1909
-		buildNumber == 19041); // 2004 & 20H2 & 21H1
+		buildNumber >= 19041); // 2004 & 20H2 & 21H1 & later
+	//Win11 22H2 22621 still works
 }
 
 void InitDarkMode()
