@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         submodules: true
         fetch-depth: 0
@@ -27,10 +27,10 @@ jobs:
         pip install -r requirements.txt
         ./gen_rc.sh
       shell: bash
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: translate
-        path: generated/translate.rc
+        path: translate/generated/translate.rc
         if-no-files-found: error
     - run: |
         mkdir .nuget
@@ -55,32 +55,32 @@ jobs:
           msbuild ClashXW.sln "-p:Configuration=Release;Platform=ARM64" }
         Get-Job | Wait-Job | Receive-Job
       shell: powershell
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: ClashXW64
         path: x64/Release/ClashXW64.exe
         if-no-files-found: error
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: ClashXW64
         path: x64/Release/ClashXW64.pdb
         if-no-files-found: error
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: ClashXW32
         path: Release/ClashXW32.exe
         if-no-files-found: error
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: ClashXW32
         path: Release/ClashXW32.pdb
         if-no-files-found: error
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: ClashXWARM64
         path: ARM64/Release/ClashXWARM64.exe
         if-no-files-found: error
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: ClashXWARM64
         path: ARM64/Release/ClashXWARM64.pdb
