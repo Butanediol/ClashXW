@@ -27,6 +27,11 @@ jobs:
         pip install -r requirements.txt
         ./gen_rc.sh
       shell: bash
+    - uses: actions/upload-artifact@v2
+      with:
+        name: translate
+        path: generated/translate.rc
+        if-no-files-found: error
     - run: |
         mkdir .nuget
         cd .nuget
