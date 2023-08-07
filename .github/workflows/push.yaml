@@ -19,9 +19,7 @@ jobs:
     - uses: nuget/setup-nuget@v1
       with:
         nuget-version: latest
-    - uses: actions/setup-python@v2
-      with:
-        python-version: 3.7
+    - uses: actions/setup-python@v4
     - run: |
         cd translate
         pip install -r requirements.txt
