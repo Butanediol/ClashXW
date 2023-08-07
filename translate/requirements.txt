@@ -1,2 +1,3 @@
 six
+pyparsing
 translate_toolkit
