@@ -341,3 +341,4 @@ healthchecksdb
 
 translate/generated
 pkg/
+vcpkg_installed/
