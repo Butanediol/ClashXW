@@ -42,47 +42,16 @@ jobs:
         nuget restore ClashXW.sln
       shell: bash
     - run: |
-        vcpkg install skyr-url --triplet=arm64-windows-static
         vcpkg install skyr-url --triplet=x64-windows-static
-        vcpkg install skyr-url --triplet=x86-windows-static
         vcpkg integrate install
       shell: cmd
     - run: |
         Start-Job -Init ([ScriptBlock]::Create("Set-Location '$pwd'")) -Script {
           msbuild ClashXW.sln "-p:Configuration=Release;Platform=x64" }
-        Start-Job -Init ([ScriptBlock]::Create("Set-Location '$pwd'")) -Script {
-          msbuild ClashXW.sln "-p:Configuration=Release;Platform=x86" }
-        Start-Job -Init ([ScriptBlock]::Create("Set-Location '$pwd'")) -Script {
-          msbuild ClashXW.sln "-p:Configuration=Release;Platform=ARM64" }
         Get-Job | Wait-Job | Receive-Job
       shell: powershell
     - uses: actions/upload-artifact@v3
       with:
         name: ClashXW64
         path: x64/Release/ClashXW64.exe
-        if-no-files-found: error
-    - uses: actions/upload-artifact@v3
-      with:
-        name: ClashXW64
-        path: x64/Release/ClashXW64.pdb
-        if-no-files-found: error
-    - uses: actions/upload-artifact@v3
-      with:
-        name: ClashXW32
-        path: Release/ClashXW32.exe
-        if-no-files-found: error
-    - uses: actions/upload-artifact@v3
-      with:
-        name: ClashXW32
-        path: Release/ClashXW32.pdb
-        if-no-files-found: error
-    - uses: actions/upload-artifact@v3
-      with:
-        name: ClashXWARM64
-        path: ARM64/Release/ClashXWARM64.exe
-        if-no-files-found: error
-    - uses: actions/upload-artifact@v3
-      with:
-        name: ClashXWARM64
-        path: ARM64/Release/ClashXWARM64.pdb
         if-no-files-found: error
