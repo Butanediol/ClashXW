@@ -297,7 +297,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 		CheckMenuItem(g_hContextMenu, IDM_REMOTECONFIG_AUTOUPDATE, MF_BYCOMMAND | (g_settings.configAutoUpdate ? MF_CHECKED : MF_UNCHECKED));
 		CheckMenuItem(g_hContextMenu, IDM_EXPERIMENTAL_OPENDASHBOARDINBROWSER, MF_BYCOMMAND | (g_settings.openDashboardInBrowser ? MF_CHECKED : MF_UNCHECKED));
-		EnableMenuItem(g_hContextMenu, IDM_STARTATLOGIN, MF_BYCOMMAND | (g_portableMode ? MF_DISABLED : MF_ENABLED));
+		//EnableMenuItem(g_hContextMenu, IDM_STARTATLOGIN, MF_BYCOMMAND | (g_portableMode ? MF_DISABLED : MF_ENABLED));
+		EnableMenuItem(g_hContextMenu, IDM_STARTATLOGIN, MF_BYCOMMAND | MF_ENABLED);
 
 		WatchConfigFile();
 	}
@@ -655,7 +656,7 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_CTLCOLORDLG:
 	case WM_CTLCOLORSTATIC:
 	{
-		bool darkModeEnabled = ShouldAppsUseDarkMode() && !IsHighContrast();
+		bool darkModeEnabled = _ShouldAppsUseDarkMode() && !IsHighContrast();
 		if (message == WM_CTLCOLORSTATIC)
 		{
 			HDC hdc = reinterpret_cast<HDC>(wParam);

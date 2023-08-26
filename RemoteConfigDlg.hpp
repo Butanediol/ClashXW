@@ -320,7 +320,7 @@ INT_PTR CALLBACK RemoteConfigDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPA
 		}
 		break;
 	case WM_CTLCOLORDLG:
-		if (ShouldAppsUseDarkMode() && !IsHighContrast())
+		if (_ShouldAppsUseDarkMode() && !IsHighContrast())
 		{
 			if (!hDarkBrush)
 				hDarkBrush.reset(CreateSolidBrush(DarkWindowBkColor));

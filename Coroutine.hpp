@@ -19,181 +19,181 @@
 
 #pragma once
 
-template <typename T, typename TExecutor>
-[[nodiscard]] inline auto Promise(TExecutor&& executor) noexcept
-{
-	using std::coroutine_handle;
-
-	struct _Promise
-	{
-		_Promise(TExecutor&& executor) : m_coroHandle(nullptr), m_result(std::nullopt), m_reason()
-		{
-			executor([this](T&& resolution) {
-				assert(!m_result.has_value());
-				assert(!m_reason);
-
-				m_result.emplace(std::move(resolution));
-
-				if (m_coroHandle)
-					coroutine_handle<>::from_address(m_coroHandle).resume();
-			}, [this](const std::exception_ptr& reason) {
-				assert(!m_result.has_value());
-				assert(!m_reason);
-
-				m_reason = reason;
-
-				if (m_coroHandle)
-					coroutine_handle<>::from_address(m_coroHandle).resume();
-			});
-		}
-
-		struct awaiter_base
-		{
-			awaiter_base(_Promise* self) noexcept : m_self(self) {}
-
-			bool await_ready() const noexcept
-			{
-				return m_self->m_reason || m_self->m_result.has_value();
-			}
-
-			void await_suspend(coroutine_handle<> handle)
-			{
-				m_self->m_coroHandle = handle.address();
-			}
-
-		protected:
-			_Promise* const m_self;
-		};
-
-		auto operator co_await() & noexcept
-		{
-			struct awaiter : awaiter_base
-			{
-				decltype(auto) await_resume() const
-				{
-					if (m_self->m_reason)
-						std::rethrow_exception(m_self->m_reason);
-
-					assert(m_self->m_result.has_value());
-					return *(m_self->m_result);
-				}
-			};
-
-			return awaiter{ this };
-		}
-
-		auto operator co_await() && noexcept
-		{
-			struct awaiter : awaiter_base
-			{
-				decltype(auto) await_resume() const
-				{
-					if (m_self->m_reason)
-						std::rethrow_exception(m_self->m_reason);
-
-					assert(m_self->m_result.has_value());
-					return *std::move(m_self->m_result);
-				}
-			};
-
-			return awaiter{ this };
-		}
-
-	private:
-		void* m_coroHandle;
-		std::optional<T> m_result;
-		std::exception_ptr m_reason;
-	};
-
-	return _Promise{ std::forward<TExecutor>(executor) };
-}
-
-template <typename T, typename TExecutor>
-[[nodiscard]] inline auto LazyPromise(TExecutor&& executor) noexcept
-{
-	using std::coroutine_handle;
-
-	struct _LazyPromise
-	{
-		_LazyPromise(TExecutor&& executor) : m_executor(std::move(executor)),
-			m_coroHandle(nullptr), m_result(std::nullopt), m_reason() {}
-
-		struct awaiter_base
-		{
-			awaiter_base(_LazyPromise* self) noexcept : m_self(self) {}
-
-			bool await_ready() const noexcept
-			{
-				return m_self->m_reason || m_self->m_result.has_value();
-			}
-
-			void await_suspend(coroutine_handle<> handle)
-			{
-				m_self->m_coroHandle = handle.address();
-				m_self->m_executor([this](T&& resolution) {
-					assert(!m_self->m_result.has_value());
-					assert(!m_self->m_reason);
-
-					m_self->m_result.emplace(std::move(resolution));
-
-					coroutine_handle<>::from_address(m_self->m_coroHandle).resume();
-				}, [this](const std::exception_ptr& reason) {
-					assert(!m_self->m_result.has_value());
-					assert(!m_self->m_reason);
-
-					m_self->m_reason = reason;
-
-					coroutine_handle<>::from_address(m_self->m_coroHandle).resume();
-				});
-			}
-
-		protected:
-			_LazyPromise* const m_self;
-		};
-
-		auto operator co_await() & noexcept
-		{
-			struct awaiter : awaiter_base
-			{
-				decltype(auto) await_resume() const
-				{
-					if (m_self->m_reason)
-						std::rethrow_exception(m_self->m_reason);
-
-					assert(m_self->m_result.has_value());
-					return *(m_self->m_result);
-				}
-			};
-
-			return awaiter{ this };
-		}
-
-		auto operator co_await() && noexcept
-		{
-			struct awaiter : awaiter_base
-			{
-				decltype(auto) await_resume() const
-				{
-					if (m_self->m_reason)
-						std::rethrow_exception(m_self->m_reason);
-
-					assert(m_self->m_result.has_value());
-					return *std::move(m_self->m_result);
-				}
-			};
-
-			return awaiter{ this };
-		}
-
-	private:
-		TExecutor m_executor;
-		void* m_coroHandle;
-		std::optional<T> m_result;
-		std::exception_ptr m_reason;
-	};
-
-	return _LazyPromise{ std::forward<TExecutor>(executor) };
-}
+//template <typename T, typename TExecutor>
+//[[nodiscard]] inline auto Promise(TExecutor&& executor) noexcept
+//{
+//	using std::coroutine_handle;
+//
+//	struct _Promise
+//	{
+//		_Promise(TExecutor&& executor) : m_coroHandle(nullptr), m_result(std::nullopt), m_reason()
+//		{
+//			executor([this](T&& resolution) {
+//				assert(!m_result.has_value());
+//				assert(!m_reason);
+//
+//				m_result.emplace(std::move(resolution));
+//
+//				if (m_coroHandle)
+//					coroutine_handle<>::from_address(m_coroHandle).resume();
+//			}, [this](const std::exception_ptr& reason) {
+//				assert(!m_result.has_value());
+//				assert(!m_reason);
+//
+//				m_reason = reason;
+//
+//				if (m_coroHandle)
+//					coroutine_handle<>::from_address(m_coroHandle).resume();
+//			});
+//		}
+//
+//		struct awaiter_base
+//		{
+//			awaiter_base(_Promise* self) noexcept : m_self(self) {}
+//
+//			bool await_ready() const noexcept
+//			{
+//				return m_self->m_reason || m_self->m_result.has_value();
+//			}
+//
+//			void await_suspend(coroutine_handle<> handle)
+//			{
+//				m_self->m_coroHandle = handle.address();
+//			}
+//
+//		protected:
+//			_Promise* const m_self;
+//		};
+//
+//		auto operator co_await() & noexcept
+//		{
+//			struct awaiter : awaiter_base
+//			{
+//				decltype(auto) await_resume() const
+//				{
+//					if (m_self->m_reason)
+//						std::rethrow_exception(m_self->m_reason);
+//
+//					assert(m_self->m_result.has_value());
+//					return *(m_self->m_result);
+//				}
+//			};
+//
+//			return awaiter{ this };
+//		}
+//
+//		auto operator co_await() && noexcept
+//		{
+//			struct awaiter : awaiter_base
+//			{
+//				decltype(auto) await_resume() const
+//				{
+//					if (m_self->m_reason)
+//						std::rethrow_exception(m_self->m_reason);
+//
+//					assert(m_self->m_result.has_value());
+//					return *std::move(m_self->m_result);
+//				}
+//			};
+//
+//			return awaiter{ this };
+//		}
+//
+//	private:
+//		void* m_coroHandle;
+//		std::optional<T> m_result;
+//		std::exception_ptr m_reason;
+//	};
+//
+//	return _Promise{ std::forward<TExecutor>(executor) };
+//}
+//
+//template <typename T, typename TExecutor>
+//[[nodiscard]] inline auto LazyPromise(TExecutor&& executor) noexcept
+//{
+//	using std::coroutine_handle;
+//
+//	struct _LazyPromise
+//	{
+//		_LazyPromise(TExecutor&& executor) : m_executor(std::move(executor)),
+//			m_coroHandle(nullptr), m_result(std::nullopt), m_reason() {}
+//
+//		struct awaiter_base
+//		{
+//			awaiter_base(_LazyPromise* self) noexcept : m_self(self) {}
+//
+//			bool await_ready() const noexcept
+//			{
+//				return m_self->m_reason || m_self->m_result.has_value();
+//			}
+//
+//			void await_suspend(coroutine_handle<> handle)
+//			{
+//				m_self->m_coroHandle = handle.address();
+//				m_self->m_executor([this](T&& resolution) {
+//					assert(!m_self->m_result.has_value());
+//					assert(!m_self->m_reason);
+//
+//					m_self->m_result.emplace(std::move(resolution));
+//
+//					coroutine_handle<>::from_address(m_self->m_coroHandle).resume();
+//				}, [this](const std::exception_ptr& reason) {
+//					assert(!m_self->m_result.has_value());
+//					assert(!m_self->m_reason);
+//
+//					m_self->m_reason = reason;
+//
+//					coroutine_handle<>::from_address(m_self->m_coroHandle).resume();
+//				});
+//			}
+//
+//		protected:
+//			_LazyPromise* const m_self;
+//		};
+//
+//		auto operator co_await() & noexcept
+//		{
+//			struct awaiter : awaiter_base
+//			{
+//				decltype(auto) await_resume() const
+//				{
+//					if (m_self->m_reason)
+//						std::rethrow_exception(m_self->m_reason);
+//
+//					assert(m_self->m_result.has_value());
+//					return *(m_self->m_result);
+//				}
+//			};
+//
+//			return awaiter{ this };
+//		}
+//
+//		auto operator co_await() && noexcept
+//		{
+//			struct awaiter : awaiter_base
+//			{
+//				decltype(auto) await_resume() const
+//				{
+//					if (m_self->m_reason)
+//						std::rethrow_exception(m_self->m_reason);
+//
+//					assert(m_self->m_result.has_value());
+//					return *std::move(m_self->m_result);
+//				}
+//			};
+//
+//			return awaiter{ this };
+//		}
+//
+//	private:
+//		TExecutor m_executor;
+//		void* m_coroHandle;
+//		std::optional<T> m_result;
+//		std::exception_ptr m_reason;
+//	};
+//
+//	return _LazyPromise{ std::forward<TExecutor>(executor) };
+//}
 
 [[nodiscard]] inline auto ResumeForeground() noexcept
 {
