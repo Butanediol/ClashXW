@@ -55,3 +55,8 @@ jobs:
         name: ClashXW64
         path: x64/Release/ClashXW64.exe
         if-no-files-found: error
+    - uses: actions/upload-artifact@v3
+      with:
+        name: ClashXW64
+        path: x64/Release/ClashXW64.pdb
+        if-no-files-found: error
