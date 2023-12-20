@@ -529,7 +529,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case NIN_KEYSELECT:
 		case WM_CONTEXTMENU:
 			[](HWND hWnd, WPARAM wParam) -> winrt::fire_and_forget {
-				co_await winrt::resume_background();
 				[]() -> IAsyncAction {
 					co_await winrt::resume_background();
 					try
