@@ -21,11 +21,11 @@ jobs:
     - uses: actions/setup-python@v2
       with:
         python-version: 3.7
-    - run: |
-        cd translate
-        pip install -r requirements.txt
-        ./gen_rc.sh
-      shell: bash
+    # - run: |
+    #     cd translate
+    #     pip install -r requirements.txt
+    #     ./gen_rc.sh
+    #   shell: bash
     - run: |
         mkdir .nuget
         cd .nuget
