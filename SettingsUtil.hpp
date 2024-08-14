@@ -170,6 +170,7 @@ struct ClashConfig
 	uint16_t socksPort;
 	uint16_t mixedPort;
 	bool allowLan;
+	bool tun;
 	ClashProxyMode mode;
 	ClashLogLevel logLevel;
 

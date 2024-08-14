@@ -60,6 +60,7 @@ const std::unordered_map<AccelKey, WORD> MenuAccel = {
 	{ {FCONTROL, 'M'}, IDM_REMOTECONFIG_MANAGE },
 	{ {FCONTROL, 'U'}, IDM_REMOTECONFIG_UPDATE },
 	{ {FCONTROL, 'Q'}, IDM_QUIT },
+	{ {FCONTROL, 'E'}, IDM_TUN},
 };
 
 namespace MenuUtil
@@ -414,6 +415,8 @@ namespace MenuUtil
 			THROW_LAST_ERROR_IF_NULL(g_hPortsMenu);
 
 			SetMenuItemText(g_hContextMenu, IDM_COPYCOMMAND, FALSE, _(L"Copy shell command\tCtrl+C"));
+
+			AppendMenuW(g_hContextMenu, MF_STRING, IDM_TUN, L"Enable TUN");
 		}
 		CATCH_FAIL_FAST();
 	}
