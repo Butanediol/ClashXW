@@ -138,6 +138,12 @@ public:
 		return res.statusCode == 204; // HTTP 204 No Content
 	}
 
+	bool UpdateTunConfig(bool enable)
+	{
+		auto res = Request(L"/configs", L"PATCH", { {"tun", {{"enable", enable}}} });
+		return res.statusCode == 204; // HTTP 204 No Content
+	}
+
 	u16milliseconds GetProxyDelay(std::string_view proxyName)
 	{
 		std::wstring path = L"/proxies/";

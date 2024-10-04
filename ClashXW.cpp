@@ -351,6 +351,25 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			}();
 		}
 		break;
+		case IDM_TUN:
+		{
+			[]() -> winrt::fire_and_forget {
+				co_await winrt::resume_background();
+				try
+				{
+					if (!g_clashApi->UpdateTunConfig(!g_clashConfig.tun))
+						co_return;
+					g_clashConfig = g_clashApi->GetConfig();
+				}
+				catch (...)
+				{
+					LOG_CAUGHT_EXCEPTION();
+					co_return;
+				}
+				co_await ResumeForeground();
+				MenuUtil::UpdateMenus();
+			}();
+		}
 		case IDM_LOGLEVEL_ERROR:
 		case IDM_LOGLEVEL_WARNING:
 		case IDM_LOGLEVEL_INFO:
