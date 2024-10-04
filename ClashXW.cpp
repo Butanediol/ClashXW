@@ -351,6 +351,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			}();
 		}
 		break;
+		case IDM_TOGGLETUNNEL:
+		{
+			// TODO: Toggle TUN
+			// For now we just show a message box
+			MessageBoxW(hWnd, _(L"TUN toggle is not supported on this platform"), _(L"Feature not supported"), MB_OK | MB_ICONWARNING);
+		}
+		break;
 		case IDM_LOGLEVEL_ERROR:
 		case IDM_LOGLEVEL_WARNING:
 		case IDM_LOGLEVEL_INFO:

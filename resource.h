@@ -13,6 +13,7 @@
 #define IDM_STARTATLOGIN                7
 #define IDM_SHOWINDICATOR               8
 #define IDM_ALLOWFROMLAN                9
+#define IDM_TOGGLETUNNEL                34
 #define IDM_BENCHMARK                   10
 #define IDM_DASHBOARD                   11
 #define IDM_CONFIG_OPENFOLDER           12
