@@ -118,6 +118,7 @@ IDC_MENU MENU
         MENUITEM "Start at login",              IDM_STARTATLOGIN
         MENUITEM "Show network indicator",      IDM_SHOWINDICATOR, INACTIVE
         MENUITEM "Allow connect from Lan",      IDM_ALLOWFROMLAN
+        MENUITEM "Toggle TUN",                  IDM_TOGGLETUNNEL
         MENUITEM SEPARATOR
         MENUITEM "Benchmark\tCtrl+T",           IDM_BENCHMARK, INACTIVE
         MENUITEM "Dashboard\tCtrl+D",           IDM_DASHBOARD
@@ -139,7 +140,6 @@ IDC_MENU MENU
                 MENUITEM "Set benchmark url",           IDM_EXPERIMENTAL_SETBENCHURL
                 MENUITEM "Open dashboard in browser",   IDM_EXPERIMENTAL_OPENDASHBOARDINBROWSER
                 MENUITEM "Show clash console",          IDM_EXPERIMENTAL_SHOWCLASHCONSOLE
-                MENUITEM "Toggle TUN",                  IDM_TOGGLETUNNEL
             END
         END
         POPUP "Help"
