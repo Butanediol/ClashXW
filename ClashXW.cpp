@@ -353,8 +353,23 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 		case IDM_TOGGLETUNNEL:
 		{
-			// TODO: Toggle TUN
-			// For now we just show a message box
+			[](bool enable) -> winrt::fire_and_forget {
+				co_await winrt::resume_background();
+				try
+				{
+					if (!g_clashApi->UpdateTunEnable(enable))
+						co_return;
+					g_clashConfig = g_clashApi->GetConfig();
+				}
+				catch (...)
+				{
+					LOG_CAUGHT_EXCEPTION();
+					co_return;
+				}
+				co_await ResumeForeground();
+				MenuUtil::UpdateMenus();
+			}(!g_clashConfig.tunEnable);
+			
 			MessageBoxW(hWnd, _(L"TUN toggle is not supported on this platform"), _(L"Feature not supported"), MB_OK | MB_ICONWARNING);
 		}
 		break;

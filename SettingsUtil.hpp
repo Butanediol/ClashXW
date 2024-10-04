@@ -170,6 +170,7 @@ struct ClashConfig
 	uint16_t socksPort;
 	uint16_t mixedPort;
 	bool allowLan;
+	bool tunEnable;
 	ClashProxyMode mode;
 	ClashLogLevel logLevel;
 
@@ -178,6 +179,7 @@ struct ClashConfig
 		j.at("socks-port").get_to(c.socksPort);
 		j.at("mixed-port").get_to(c.mixedPort);
 		j.at("allow-lan").get_to(c.allowLan);
+		j.at("tun").at("enable").get_to(c.tunEnable);
 		j.at("mode").get_to(c.mode);
 		j.at("log-level").get_to(c.logLevel);
 	}

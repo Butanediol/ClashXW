@@ -117,6 +117,7 @@ namespace MenuUtil
 			CheckMenuItem(g_hContextMenu, IDM_SYSTEMPROXY, g_settings.systemProxy ? MF_CHECKED : MF_UNCHECKED);
 			CheckMenuItem(g_hContextMenu, IDM_STARTATLOGIN, StartAtLogin::IsEnabled() ? MF_CHECKED : MF_UNCHECKED);
 			CheckMenuItem(g_hContextMenu, IDM_ALLOWFROMLAN, g_clashConfig.allowLan ? MF_CHECKED : MF_UNCHECKED);
+			CheckMenuItem(g_hContextMenu, IDM_TOGGLETUNNEL, g_clashConfig.tunEnable ? MF_CHECKED : MF_UNCHECKED);
 		}
 
 		void UpdateProxyModeMenu()
@@ -380,6 +381,11 @@ namespace MenuUtil
 			}
 			return DefSubclassProc(hWnd, uMsg, wParam, lParam);
 		}
+
+		void UpdateTunMenu()
+		{
+			CheckMenuItem(g_hContextMenu, IDM_TOGGLETUNNEL, MF_BYCOMMAND | (g_clashConfig.tunEnable ? MF_CHECKED : MF_UNCHECKED));
+		}
 	}
 
 	void SetupMenu() noexcept
@@ -476,6 +482,7 @@ namespace MenuUtil
 		UpdateLogLevelMenu();
 		UpdatePortsMenu();
 		UpdateProxyGroupsMenu();
+		UpdateTunMenu();
 	}
 
 	void PostCommandByMenuIndex(HWND hWnd, HMENU hMenu, size_t i)
